@@ -23,3 +23,6 @@ trim_trailing_whitespace = false
 
 [*.{sh,ps1}]
 indent_size = 2
+
+[*.sh]
+end_of_line = lf
