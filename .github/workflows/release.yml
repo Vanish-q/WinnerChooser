@@ -1,0 +1,126 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Подписанный APK
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Версия из тега
+        id: version
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          VERSION="${TAG#v}"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+      # Без секции в CHANGELOG релиз не собирается: описание должно быть написано руками.
+      - name: Проверить секцию CHANGELOG
+        run: |
+          chmod +x scripts/changelog-section.sh
+          scripts/changelog-section.sh "${{ steps.version.outputs.version }}" > release-notes.md
+          cat release-notes.md
+
+      - name: Рабочая нагрузка MAUI Android
+        run: dotnet workload install maui-android
+
+      - name: Android SDK
+        run: >
+          dotnet build src/WinnerChooser.App/WinnerChooser.App.csproj
+          -f net10.0-android
+          -t:InstallAndroidDependencies
+          -p:AcceptAndroidSDKLicenses=True
+
+      - name: Ключ подписи
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          echo "${ANDROID_KEYSTORE_BASE64}" | base64 --decode > "${RUNNER_TEMP}/winnerchooser.keystore"
+
+      - name: Собрать подписанный APK
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          dotnet publish src/WinnerChooser.App/WinnerChooser.App.csproj \
+            -f net10.0-android \
+            -c Release \
+            -p:AndroidPackageFormats=apk \
+            -p:AndroidKeyStore=true \
+            -p:AndroidSigningKeyStore="${RUNNER_TEMP}/winnerchooser.keystore" \
+            -p:AndroidSigningKeyAlias="${ANDROID_KEY_ALIAS}" \
+            -p:AndroidSigningKeyPass=env:ANDROID_KEY_PASSWORD \
+            -p:AndroidSigningStorePass=env:ANDROID_KEYSTORE_PASSWORD \
+            -p:ApplicationDisplayVersion="${{ steps.version.outputs.version }}" \
+            -p:ApplicationVersion="${{ github.run_number }}"
+
+      - name: Проверить подпись и разрешения
+        run: |
+          BUILD_TOOLS="$(ls -d "${ANDROID_HOME}"/build-tools/* | sort -V | tail -n 1)"
+          APK="$(find src/WinnerChooser.App/bin/Release/net10.0-android -name '*-Signed.apk' | head -n 1)"
+          echo "APK: ${APK}"
+
+          "${BUILD_TOOLS}/apksigner" verify --print-certs "${APK}" | tee certs.txt
+
+          if [ -x "${BUILD_TOOLS}/aapt" ]; then
+            "${BUILD_TOOLS}/aapt" dump permissions "${APK}" | tee permissions.txt
+          else
+            "${BUILD_TOOLS}/aapt2" dump permissions "${APK}" | tee permissions.txt
+          fi
+
+          # Разрешение DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION добавляет androidx,
+          # оно собственное и не запрашивает доступ к данным. Любое другое — ошибка.
+          if grep "uses-permission" permissions.txt | grep -v "DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" | grep -q .; then
+            echo "APK запрашивает лишние разрешения" >&2
+            exit 1
+          fi
+
+          NAME="winnerchooser-${{ steps.version.outputs.version }}.apk"
+          cp "${APK}" "${NAME}"
+          sha256sum "${NAME}" > "${NAME}.sha256"
+
+          {
+            echo ""
+            echo "Сертификат подписи:"
+            echo '```'
+            cat certs.txt
+            echo '```'
+            echo ""
+            echo "SHA-256 APK:"
+            echo '```'
+            cat "${NAME}.sha256"
+            echo '```'
+          } >> release-notes.md
+
+      - name: Опубликовать релиз
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.version.outputs.tag }}" \
+            "winnerchooser-${{ steps.version.outputs.version }}.apk" \
+            "winnerchooser-${{ steps.version.outputs.version }}.apk.sha256" \
+            --title "WinnerChooser ${{ steps.version.outputs.version }}" \
+            --notes-file release-notes.md \
+            --latest
+
+      - name: Удалить ключ
+        if: always()
+        run: rm -f "${RUNNER_TEMP}/winnerchooser.keystore"

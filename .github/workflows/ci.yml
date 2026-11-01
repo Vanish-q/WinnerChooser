@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Тесты ядра
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Тесты
+        run: dotnet test tests/WinnerChooser.Core.Tests/WinnerChooser.Core.Tests.csproj -c Release -p:TreatWarningsAsErrors=true
+
+  build-android:
+    name: Сборка Android
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Рабочая нагрузка MAUI Android
+        run: dotnet workload install maui-android
+
+      - name: Android SDK
+        run: >
+          dotnet build src/WinnerChooser.App/WinnerChooser.App.csproj
+          -f net10.0-android
+          -t:InstallAndroidDependencies
+          -p:AcceptAndroidSDKLicenses=True
+
+      - name: Debug APK
+        run: dotnet build src/WinnerChooser.App/WinnerChooser.App.csproj -f net10.0-android -c Debug
