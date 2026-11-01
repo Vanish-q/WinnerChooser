@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WinnerChooser.App.Pages.MainPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#121212">
+
+    <Grid RowDefinitions="Auto,*" Padding="24,40,24,24" RowSpacing="28">
+
+        <VerticalStackLayout Grid.Row="0" Spacing="6">
+            <Label Text="Выбор победителя"
+                   FontSize="32"
+                   FontAttributes="Bold"
+                   TextColor="#FFFFFF"
+                   SemanticProperties.HeadingLevel="Level1" />
+            <Label Text="Режимы"
+                   FontSize="16"
+                   TextColor="#9E9E9E" />
+        </VerticalStackLayout>
+
+        <VerticalStackLayout Grid.Row="1" Spacing="16" VerticalOptions="Start">
+
+            <Button Text="Выбор победителя"
+                    Clicked="OnWinnerPickerClicked"
+                    HeightRequest="72"
+                    FontSize="20"
+                    CornerRadius="16"
+                    BackgroundColor="#1E1E1E"
+                    TextColor="#FFFFFF"
+                    HorizontalOptions="Fill"
+                    SemanticProperties.Description="Открыть режим выбора победителя" />
+
+            <Label Text="Положите пальцы на экран — через 3 секунды приложение случайно выберет одного."
+                   FontSize="15"
+                   TextColor="#9E9E9E" />
+
+        </VerticalStackLayout>
+
+    </Grid>
+
+</ContentPage>

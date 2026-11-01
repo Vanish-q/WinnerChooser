@@ -1,0 +1,29 @@
+# Build output
+bin/
+obj/
+artifacts/
+
+# IDE
+.vs/
+.idea/
+*.user
+*.suo
+*.userprefs
+.vscode/
+
+# Signing material: never commit
+*.keystore
+*.jks
+*.apk
+*.aab
+*.keystore.b64
+
+# Test results
+TestResults/
+coverage*.xml
+*.trx
+
+# OS junk
+Thumbs.db
+desktop.ini
+.DS_Store

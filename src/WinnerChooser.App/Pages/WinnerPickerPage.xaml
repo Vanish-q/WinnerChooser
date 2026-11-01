@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:WinnerChooser.App.Controls"
+             x:Class="WinnerChooser.App.Pages.WinnerPickerPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#121212">
+
+    <Grid>
+
+        <!-- Поле на весь экран: круги рисуются под системными барами. -->
+        <GraphicsView x:Name="Board" />
+
+        <!-- Прозрачный слой касаний поверх рисунка. -->
+        <controls:MultiTouchCanvas x:Name="Canvas" />
+
+        <!-- Подсказки и кнопка закрытия — внутри безопасной зоны. -->
+        <Grid SafeAreaEdges="All"
+              Padding="16,12"
+              InputTransparent="True"
+              CascadeInputTransparent="False">
+
+            <VerticalStackLayout HorizontalOptions="Center"
+                                 VerticalOptions="Start"
+                                 Spacing="4">
+                <Label x:Name="CountdownLabel"
+                       Text=""
+                       IsVisible="False"
+                       FontSize="56"
+                       FontAttributes="Bold"
+                       TextColor="#FFFFFF"
+                       HorizontalTextAlignment="Center" />
+                <Label x:Name="HintLabel"
+                       Text="Положите пальцы на экран"
+                       FontSize="18"
+                       TextColor="#B0B0B0"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+
+            <Button x:Name="CloseButton"
+                    Text="×"
+                    Clicked="OnCloseClicked"
+                    WidthRequest="48"
+                    HeightRequest="48"
+                    Padding="0"
+                    CornerRadius="24"
+                    FontSize="26"
+                    BackgroundColor="#33000000"
+                    TextColor="#FFFFFF"
+                    HorizontalOptions="End"
+                    VerticalOptions="Start"
+                    SemanticProperties.Description="Закрыть режим выбора победителя" />
+
+        </Grid>
+
+    </Grid>
+
+</ContentPage>
