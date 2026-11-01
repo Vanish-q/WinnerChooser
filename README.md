@@ -3,15 +3,15 @@
 [![CI](https://github.com/Vanish-q/WinnerChooser/actions/workflows/ci.yml/badge.svg)](https://github.com/Vanish-q/WinnerChooser/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/Vanish-q/WinnerChooser)](https://github.com/Vanish-q/WinnerChooser/releases/latest)
 
-Android-приложение для честного случайного выбора: все кладут пальцы на экран, через 3 секунды после последнего касания приложение выбирает одного — его круг становится золотым. Никаких имён, регистрации, сети и разрешений.
+Android-приложение для честного случайного выбора: все кладут пальцы на экран, через несколько секунд после последнего касания приложение выбирает одного — его круг становится золотым. Никаких имён, регистрации, сети и разрешений.
 
-> A simple Android app that picks a random winner among people touching the screen. Place at least two fingers on the display; three seconds after the last touch one finger is chosen uniformly at random and its circle turns gold. No network, no analytics, no permissions. Built with .NET MAUI.
+> A simple Android app that picks a random winner among people touching the screen. Place at least two fingers on the display; after a short pause one finger is chosen uniformly at random and its circle turns gold. No network, no analytics, no permissions. Built with .NET MAUI.
 
 ## Как играть
 
-1. Запустите приложение и нажмите «Выбор победителя».
+1. Запустите приложение и нажмите «Жребий».
 2. Положите на экран два пальца или больше.
-3. Не двигайте пальцами: через 3 секунды после последнего касания один из кругов станет золотым.
+3. Не двигайте пальцами: через 3 секунды (по умолчанию) после последнего касания один из кругов станет золотым.
 4. Чтобы начать новый раунд, уберите пальцы и коснитесь экрана снова (не раньше чем через секунду после победы).
 5. Выйти из режима — кнопка «×» в правом верхнем углу или системная кнопка «Назад».
 
@@ -106,9 +106,23 @@ dotnet build src/WinnerChooser.App -f net10.0-android -t:InstallAndroidDependenc
 
 Workflow `release.yml` проверит, что секция для версии существует и не пуста, соберёт подписанный APK, проверит подпись и отсутствие разрешений, посчитает SHA-256 и создаст релиз.
 
-## Настройка
+## Настройки
 
-Все тайминги и размеры собраны в одном месте — `src/WinnerChooser.Core/RoundOptions.cs`:
+Кнопка с ползунками в правом верхнем углу главного экрана открывает настройки:
+
+| Настройка | Диапазон | По умолчанию |
+|---|---|---|
+| Время до выбора | 1–10 с | 3 с |
+| Размер кругов | 32–96 DIP | 64 DIP |
+| Язык | как в системе / русский / английский | как в системе |
+
+Настройки сохраняются на устройстве и применяются к следующему раунду. Язык меняется сразу, без перезапуска. Если системный язык не русский и не английский, интерфейс будет английским.
+
+Значения по умолчанию и границы — `src/WinnerChooser.App/Services/AppSettings.cs`, строки интерфейса — `src/WinnerChooser.App/Services/L10n.cs`.
+
+### Параметры логики
+
+Все тайминги и размеры, включая недоступные из интерфейса, собраны в `src/WinnerChooser.Core/RoundOptions.cs`:
 
 | Параметр | По умолчанию | Что делает |
 |---|---|---|
@@ -124,7 +138,7 @@ Workflow `release.yml` проверит, что секция для версии
 
 ```
 src/WinnerChooser.Core/   логика раунда без MAUI: состояние, тайминги, выбор победителя
-src/WinnerChooser.App/    MAUI-приложение: страницы, отрисовка, мультитач, полноэкранный режим
+src/WinnerChooser.App/    MAUI-приложение: страницы, настройки, локализация, отрисовка, мультитач
 tests/                    xUnit-тесты логики
 scripts/                  ключ, секреты GitHub, секция CHANGELOG
 .github/workflows/        CI и релиз

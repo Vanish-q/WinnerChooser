@@ -19,7 +19,14 @@ public partial class WinnerPickerPage : ContentPage
     {
         InitializeComponent();
 
-        _controller = new RoundController(_clock, new SystemRandomSource());
+        _controller = new RoundController(
+            _clock,
+            new SystemRandomSource(),
+            new RoundOptions
+            {
+                CountdownDuration = TimeSpan.FromSeconds(AppSettings.CountdownSeconds),
+                ParticipantRadius = AppSettings.CircleRadius,
+            });
         _controller.Changed += OnControllerChanged;
         _controller.WinnerSelected += OnWinnerSelected;
 
@@ -36,6 +43,7 @@ public partial class WinnerPickerPage : ContentPage
         base.OnAppearing();
 
         FullscreenService.EnterImmersive();
+        SemanticProperties.SetDescription(CloseButton, L10n.T("CloseMode"));
 
         if (Window is not null)
         {
@@ -125,8 +133,8 @@ public partial class WinnerPickerPage : ContentPage
             case RoundState.Waiting:
                 HintLabel.IsVisible = true;
                 HintLabel.Text = _controller.Participants.Count == 0
-                    ? "Положите пальцы на экран"
-                    : "Нужен ещё один палец";
+                    ? L10n.T("HintPlaceFingers")
+                    : L10n.T("HintNeedMore");
                 CountdownLabel.IsVisible = false;
                 _timer.Stop();
                 break;

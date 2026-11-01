@@ -3,36 +3,50 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WinnerChooser.App.Pages.MainPage"
              NavigationPage.HasNavigationBar="False"
-             BackgroundColor="#121212">
+             BackgroundColor="#000000">
 
-    <Grid RowDefinitions="Auto,*" Padding="24,40,24,24" RowSpacing="28">
+    <Grid RowDefinitions="Auto,*"
+          Padding="24,40,24,24"
+          RowSpacing="28">
 
-        <VerticalStackLayout Grid.Row="0" Spacing="6">
-            <Label Text="Выбор победителя"
-                   FontSize="32"
-                   FontAttributes="Bold"
-                   TextColor="#FFFFFF"
-                   SemanticProperties.HeadingLevel="Level1" />
-            <Label Text="Режимы"
-                   FontSize="16"
-                   TextColor="#9E9E9E" />
-        </VerticalStackLayout>
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
 
-        <VerticalStackLayout Grid.Row="1" Spacing="16" VerticalOptions="Start">
+            <VerticalStackLayout Grid.Column="0" Spacing="6">
+                <Label x:Name="TitleLabel"
+                       Text="Выбор победителя"
+                       FontSize="32"
+                       FontAttributes="Bold"
+                       TextColor="#FFFFFF"
+                       SemanticProperties.HeadingLevel="Level1" />
+                <Label x:Name="ModesLabel"
+                       Text="Режимы"
+                       FontSize="16"
+                       TextColor="#9E9E9E" />
+            </VerticalStackLayout>
 
-            <Button Text="Выбор победителя"
+            <ImageButton x:Name="SettingsButton"
+                         Grid.Column="1"
+                         Source="settings.png"
+                         Clicked="OnSettingsClicked"
+                         WidthRequest="48"
+                         HeightRequest="48"
+                         Padding="12"
+                         BackgroundColor="Transparent"
+                         VerticalOptions="Start" />
+
+        </Grid>
+
+        <VerticalStackLayout Grid.Row="1" Spacing="12" VerticalOptions="Start">
+
+            <Button x:Name="ModeDrawButton"
+                    Text="Жребий"
                     Clicked="OnWinnerPickerClicked"
                     HeightRequest="72"
                     FontSize="20"
                     CornerRadius="16"
-                    BackgroundColor="#1E1E1E"
+                    BackgroundColor="#1A1A1A"
                     TextColor="#FFFFFF"
-                    HorizontalOptions="Fill"
-                    SemanticProperties.Description="Открыть режим выбора победителя" />
-
-            <Label Text="Положите пальцы на экран — через 3 секунды приложение случайно выберет одного."
-                   FontSize="15"
-                   TextColor="#9E9E9E" />
+                    HorizontalOptions="Fill" />
 
         </VerticalStackLayout>
 

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WinnerChooser.App.Pages.SettingsPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#000000">
+
+    <Grid RowDefinitions="Auto,*"
+          Padding="16,32,16,16"
+          RowSpacing="16">
+
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,*" ColumnSpacing="8">
+
+            <ImageButton x:Name="BackButton"
+                         Source="back.png"
+                         Clicked="OnBackClicked"
+                         WidthRequest="48"
+                         HeightRequest="48"
+                         Padding="12"
+                         BackgroundColor="Transparent" />
+
+            <Label x:Name="TitleLabel"
+                   Grid.Column="1"
+                   Text="Настройки"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   TextColor="#FFFFFF"
+                   VerticalOptions="Center"
+                   SemanticProperties.HeadingLevel="Level1" />
+
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="16">
+
+                <Border BackgroundColor="#141414"
+                        StrokeThickness="0"
+                        Padding="16">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="16" />
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Spacing="6">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label x:Name="CountdownTitleLabel"
+                                   Text="Время до выбора"
+                                   FontSize="17"
+                                   TextColor="#FFFFFF" />
+                            <Label x:Name="CountdownValueLabel"
+                                   Grid.Column="1"
+                                   Text="3 с"
+                                   FontSize="17"
+                                   TextColor="#FFD54F" />
+                        </Grid>
+                        <Label x:Name="CountdownHintLabel"
+                               Text="Через сколько секунд после последнего касания выбирается победитель"
+                               FontSize="13"
+                               TextColor="#8A8A8A" />
+                        <Slider x:Name="CountdownSlider"
+                                Minimum="1"
+                                Maximum="10"
+                                Value="3"
+                                ValueChanged="OnCountdownChanged"
+                                MinimumTrackColor="#FFD54F"
+                                MaximumTrackColor="#3A3A3A"
+                                ThumbColor="#FFD54F" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border BackgroundColor="#141414"
+                        StrokeThickness="0"
+                        Padding="16">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="16" />
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Spacing="6">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label x:Name="RadiusTitleLabel"
+                                   Text="Размер кругов"
+                                   FontSize="17"
+                                   TextColor="#FFFFFF" />
+                            <Label x:Name="RadiusValueLabel"
+                                   Grid.Column="1"
+                                   Text="64"
+                                   FontSize="17"
+                                   TextColor="#FFD54F" />
+                        </Grid>
+                        <Label x:Name="RadiusHintLabel"
+                               Text="Радиус круга участника"
+                               FontSize="13"
+                               TextColor="#8A8A8A" />
+                        <Slider x:Name="RadiusSlider"
+                                Minimum="32"
+                                Maximum="96"
+                                Value="64"
+                                ValueChanged="OnRadiusChanged"
+                                MinimumTrackColor="#FFD54F"
+                                MaximumTrackColor="#3A3A3A"
+                                ThumbColor="#FFD54F" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border BackgroundColor="#141414"
+                        StrokeThickness="0"
+                        Padding="16">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="16" />
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Spacing="6">
+                        <Label x:Name="LanguageTitleLabel"
+                               Text="Язык"
+                               FontSize="17"
+                               TextColor="#FFFFFF" />
+                        <Picker x:Name="LanguagePicker"
+                                TextColor="#FFFFFF"
+                                TitleColor="#8A8A8A"
+                                BackgroundColor="Transparent"
+                                SelectedIndexChanged="OnLanguageChanged" />
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+
+</ContentPage>

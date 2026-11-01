@@ -9,7 +9,7 @@ namespace WinnerChooser.App.Drawing;
 /// </summary>
 public sealed class BoardDrawable : IDrawable
 {
-    private static readonly Color Background = Color.FromArgb("#121212");
+    private static readonly Color Background = Colors.Black;
     private static readonly Color Winner = Color.FromUint(TouchPalette.WinnerColor);
     private static readonly Color RingBack = Color.FromRgba(255, 255, 255, 40);
     private static readonly Color RingFront = Color.FromArgb("#FFFFFF");

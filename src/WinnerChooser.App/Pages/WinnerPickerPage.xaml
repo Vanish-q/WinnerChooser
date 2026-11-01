@@ -4,7 +4,7 @@
              xmlns:controls="clr-namespace:WinnerChooser.App.Controls"
              x:Class="WinnerChooser.App.Pages.WinnerPickerPage"
              NavigationPage.HasNavigationBar="False"
-             BackgroundColor="#121212">
+             BackgroundColor="#000000">
 
     <Grid>
 

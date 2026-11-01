@@ -14,7 +14,7 @@
     <ApplicationId>com.vanishq.winnerchooser</ApplicationId>
 
     <!-- Версии: DisplayVersion подменяется тегом в релизе, Version — номером сборки CI -->
-    <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
+    <ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
 
     <SupportedOSPlatformVersion>24.0</SupportedOSPlatformVersion>
@@ -24,10 +24,10 @@
 
   <ItemGroup>
     <!-- Иконка приложения -->
-    <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#121212" />
+    <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#000000" />
 
     <!-- Экран запуска -->
-    <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#121212" BaseSize="128,128" />
+    <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#000000" BaseSize="128,128" />
 
     <!-- Изображения -->
     <MauiImage Include="Resources\Images\*" />
