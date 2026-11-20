@@ -21,7 +21,7 @@ public partial class WinnerPickerPage : ContentPage
 
         _controller = new RoundController(
             _clock,
-            new SystemRandomSource(),
+            new CryptoRandomSource(),
             new RoundOptions
             {
                 CountdownDuration = TimeSpan.FromSeconds(AppSettings.CountdownSeconds),

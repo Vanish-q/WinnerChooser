@@ -14,7 +14,7 @@
     <ApplicationId>com.vanishq.winnerchooser</ApplicationId>
 
     <!-- Версии: DisplayVersion подменяется тегом в релизе, Version — номером сборки CI -->
-    <ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
+    <ApplicationDisplayVersion>1.1.1</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
 
     <SupportedOSPlatformVersion>24.0</SupportedOSPlatformVersion>
